@@ -3,7 +3,7 @@
  * @version: 1.0.0
  * @Author: 李中华
  * @Date: 2024-08-14 10:46:14
- * @LastEditTime: 2024-09-14 16:08:27
+ * @LastEditTime: 2024-09-14 16:43:16
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +32,7 @@
             height: auto;
             background: #78728483;
             position: absolute;
-            padding: 5px;
+            padding: 10px;
             border: 1px solid #000;
             border-radius: 3px;
             color: whitesmoke;
@@ -41,8 +41,8 @@
             z-index: 1;
 
             img {
-                width: 50px;
-                height: 50px;
+                margin-top: 10px;
+                width: 100%;
             }
         }
     </style>
@@ -57,7 +57,10 @@
         </div>
     </div>
     <script type="module">
-        import  CesiumPopup  from "../dist/index.js";
+        // import  CesiumPopup  from "../dist/index.js";
+        // 导入cesium-popup-ts依赖
+        import CesiumPopup from "./node_modules/cesium-popup-ts/dist/index.js"
+        
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGE0MzdlZC00NGFhLTQ3ODItODQyNC01MTVlMmZiMjA4NDciLCJpZCI6NzU4ODIsImlhdCI6MTYzODk1MDcyM30.aB08DKXLq43IEtIjXrkeDMm4GYmtr9GjfDWnHWumWF0';
 
         const viewer = new Cesium.Viewer('cesiumContainer', {
