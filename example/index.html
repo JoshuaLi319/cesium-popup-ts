@@ -1,0 +1,100 @@
+<!--
+ * @Descripttion: 
+ * @version: 1.0.0
+ * @Author: 李中华
+ * @Date: 2024-08-14 10:46:14
+ * @LastEditTime: 2024-09-14 16:08:27
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- Include the CesiumJS JavaScript and CSS files -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #cesiumContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #myPopup {
+            width: 200px;
+            height: auto;
+            background: #78728483;
+            position: absolute;
+            padding: 5px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            color: whitesmoke;
+            top: 0;
+            left: 0;
+            z-index: 1;
+
+            img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cesiumContainer">
+        <div id="myPopup">
+            <h2>cesium-popup</h2>
+            <p>基于cesium开发的一个自定义弹窗类。</p>
+            <img src="./assets/lyy.jpg" alt="">
+        </div>
+    </div>
+    <script type="module">
+        import  CesiumPopup  from "../dist/index.js";
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGE0MzdlZC00NGFhLTQ3ODItODQyNC01MTVlMmZiMjA4NDciLCJpZCI6NzU4ODIsImlhdCI6MTYzODk1MDcyM30.aB08DKXLq43IEtIjXrkeDMm4GYmtr9GjfDWnHWumWF0';
+
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+        });
+        window.viewer = viewer
+        viewer.camera.setView({
+            destination: Cesium.Cartesian3.fromDegrees(12, 20, 3456789),
+            orientation: {
+                heading: Cesium.Math.toRadians(360), //方向
+                pitch: Cesium.Math.toRadians(-90), //俯仰角
+                roll: Cesium.Math.toRadians(0),
+            },
+        });
+
+        const cartesian3 = Cesium.Cartesian3.fromDegrees(12, 20, 10)
+        let entity = viewer.entities.add({
+            position: cartesian3,
+            point: {
+                pixelSize: 14,
+                color: Cesium.Color.RED,
+            },
+        })
+
+        const popupDom = document.getElementById("myPopup");
+        const cesiumPopup = new CesiumPopup({
+            viewer: viewer,
+            dom: popupDom,
+            position: cartesian3,
+            verticalOrigin: CesiumPopup.VerticalOrigin.TOP,
+            horizontalOrigin: CesiumPopup.HorizontalOrigin.LEFT,
+            isAdaptive: true,
+        });
+
+        cesiumPopup.listenPostRender();
+
+    </script>
+    </div>
+</body>
+
+</html>

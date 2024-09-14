@@ -1,0 +1,21 @@
+{
+  "name": "cesium-popup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "release": "npx tsc && npm publish"
+  },
+  "keywords": [
+    "cesium",
+    "popup",
+    "cesium-popup",
+    "typescript",
+    "gis"
+  ],
+  "author": "lizhonghua",
+  "license": "ISC",
+  "description": "基于cesium开发的一个自定义弹窗类。传入HTML元素和坐标点position即可使用。弹窗位置跟随坐标点实时更新。可以自定义弹窗相对坐标点的位置、偏移量等，可以配置弹窗自适应，尽量让弹窗显示在cesium容器内。"
+}
