@@ -1,12 +1,20 @@
 {
   "name": "cesium-popup-ts",
-  "version": "1.0.1",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "version": "1.0.3",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  },
   "type": "module",
   "scripts": {
-    "build": "npx tsc",
-    "release": "npx tsc && npm publish"
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
   },
   "keywords": [
     "cesium",
@@ -24,8 +32,16 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md",
     "package.json"
   ],
-  "description": "基于cesium开发的一个自定义弹窗类。传入HTML元素和坐标点position即可使用。弹窗位置跟随坐标点实时更新。可以自定义弹窗相对坐标点的位置、偏移量等，可以配置弹窗自适应，尽量让弹窗显示在cesium容器内。"
+  "description": "基于cesium开发的一个自定义弹窗类。传入HTML元素和坐标点position即可使用。弹窗位置跟随坐标点实时更新。可以自定义弹窗相对坐标点的位置、偏移量等，可以配置弹窗自适应，尽量让弹窗显示在cesium容器内。",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1",
+    "vue-tsc": "^2.0.29"
+  },
+  "dependencies": {
+    "cesium": "1.95"
+  }
 }

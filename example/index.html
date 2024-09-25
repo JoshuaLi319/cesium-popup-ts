@@ -3,7 +3,7 @@
  * @version: 1.0.0
  * @Author: 李中华
  * @Date: 2024-08-14 10:46:14
- * @LastEditTime: 2024-09-14 16:43:16
+ * @LastEditTime: 2024-09-20 16:29:05
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -57,25 +57,18 @@
         </div>
     </div>
     <script type="module">
-        // import  CesiumPopup  from "../dist/index.js";
+        import  CesiumPopup  from "../dist/index.js";
         // 导入cesium-popup-ts依赖
-        import CesiumPopup from "./node_modules/cesium-popup-ts/dist/index.js"
+        // import CesiumPopup from "./node_modules/cesium-popup-ts/dist/index.js"
         
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGE0MzdlZC00NGFhLTQ3ODItODQyNC01MTVlMmZiMjA4NDciLCJpZCI6NzU4ODIsImlhdCI6MTYzODk1MDcyM30.aB08DKXLq43IEtIjXrkeDMm4GYmtr9GjfDWnHWumWF0';
 
         const viewer = new Cesium.Viewer('cesiumContainer', {
         });
-        window.viewer = viewer
-        viewer.camera.setView({
-            destination: Cesium.Cartesian3.fromDegrees(12, 20, 3456789),
-            orientation: {
-                heading: Cesium.Math.toRadians(360), //方向
-                pitch: Cesium.Math.toRadians(-90), //俯仰角
-                roll: Cesium.Math.toRadians(0),
-            },
-        });
+        
 
-        const cartesian3 = Cesium.Cartesian3.fromDegrees(12, 20, 10)
+        const cartesian3 = Cesium.Cartesian3.fromDegrees(12, 20, 10);
+        
         let entity = viewer.entities.add({
             position: cartesian3,
             point: {
@@ -85,16 +78,28 @@
         })
 
         const popupDom = document.getElementById("myPopup");
+        
+        // 创建一个popup实例
         const cesiumPopup = new CesiumPopup({
             viewer: viewer,
             dom: popupDom,
-            position: cartesian3,
             verticalOrigin: CesiumPopup.VerticalOrigin.TOP,
             horizontalOrigin: CesiumPopup.HorizontalOrigin.LEFT,
             isAdaptive: true,
         });
 
-        cesiumPopup.listenPostRender();
+        // 监听cesium的postRender事件
+        cesiumPopup.bindTo(cartesian3);
+
+
+        viewer.camera.setView({
+            destination: Cesium.Cartesian3.fromDegrees(12, 20, 3456789),
+            orientation: {
+                heading: Cesium.Math.toRadians(360), //方向
+                pitch: Cesium.Math.toRadians(-90), //俯仰角
+                roll: Cesium.Math.toRadians(0),
+            },
+        });
 
     </script>
     </div>

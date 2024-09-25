@@ -5,12 +5,13 @@
  * @Date: 2024-05-28 23:14:36
  * @LastEditTime: 2024-06-05 16:50:55
  */
+import * as Cesium from "cesium";
+
 
 
 interface PopupOptions {
   dom: HTMLElement;
   viewer: Cesium.Viewer;
-  position: Cesium.Cartesian3 | (() => Cesium.Cartesian3);
   verticalOrigin: VerticalOrigin;
   horizontalOrigin: HorizontalOrigin;
   isAdaptive: boolean;
@@ -37,7 +38,6 @@ class CesiumPopup {
 
   private dom: HTMLElement;
   private viewer: Cesium.Viewer;
-  private position: Cesium.Cartesian3 | (() => Cesium.Cartesian3);
   private isAdaptive: boolean;
   private offsetLeft: number;
   private offsetTop: number;
@@ -58,7 +58,6 @@ class CesiumPopup {
     const {
       dom,
       viewer,
-      position,
       isAdaptive,
       offsetLeft,
       offsetTop,
@@ -66,13 +65,12 @@ class CesiumPopup {
       horizontalOrigin,
     } = { ...this.defaultOptions, ...options };
 
-    if (!dom || !viewer || !position) {
-      throw new Error("dom, viewer, and position are required configuration options.");
+    if (!dom || !viewer) {
+      throw new Error("dom and viewer are required configuration options.");
     }
 
     this.dom = dom;
     this.viewer = viewer;
-    this.position = position;
     this.isAdaptive = isAdaptive;
     this.offsetLeft = offsetLeft;
     this.offsetTop = offsetTop;
@@ -205,19 +203,20 @@ class CesiumPopup {
    * 弹窗跟随实体移动
    * @returns {Function} 返回移除监听的方法
    */
-  listenPostRender(): () => void {
+  bindTo(position: Cesium.Cartesian3 | (() => Cesium.Cartesian3)): () => void {
     // 在外部定义 handlePostRender 函数以便能够移除监听
     const handlePostRender = () => {
       // 通过函数获取cartesian3
-      let position = typeof this.position === 'function' ? this.position() : this.position;
+      let _position = typeof position === 'function' ? position() : position;
       // 如果位置未定义，则不往下执行
-      if (!position) return;
+      if (!_position) return;
 
       // 判断实体是否在地球背面
+      // @ts-ignore
       const isVisible: Boolean = new Cesium.EllipsoidalOccluder(
         Cesium.Ellipsoid.WGS84,
         this.viewer.camera.position,
-      ).isPointVisible(position);
+      ).isPointVisible(_position);
 
       // 如果实体在地球背面，则隐藏弹窗，不往下执行
       if (!isVisible) {
@@ -230,7 +229,7 @@ class CesiumPopup {
       // 将位置转换为屏幕坐标
       const windowPos = Cesium.SceneTransforms.wgs84ToWindowCoordinates(
         this.viewer.scene,
-        position,
+        _position,
       );
       // 更新弹窗位置
       this.updatePosition({
@@ -255,10 +254,19 @@ class CesiumPopup {
     return this.removePostRenderListener;
   }
 
+
+  
+
   /**
    * 移除监听 
    */
   removePostRenderListener() { }
+
+
+  destroy() {
+    // 移除监听
+    this.removePostRenderListener();
+  }
 
 }
 

@@ -19,7 +19,7 @@
 |-------------------|----------------------------------------------|----------------------|------------------------------------------------------------------------|--------------------------------------------------------------------|
 | `dom`             | `HTMLElement`                                | 无                   | 弹窗的 DOM 元素，必须提供此元素来作为弹窗的内容。                                 | 必选项                                                             |
 | `viewer`          | `Cesium.Viewer`                              | 无                   | Cesium 的 `Viewer` 实例，用于关联 Cesium 场景。                                | 必选项                                                             |
-| `position`        | `Cesium.Cartesian3` \| `() => Cesium.Cartesian3` | 无                   | 弹窗的初始位置，支持固定位置或函数动态获取位置。                                     | 必选项                                                             |
+置。                                     | 必选项                                                             |
 | `isAdaptive`      | `boolean`                                    | `false`              | 是否自适应弹窗大小。                                                     | 可选项，设置为 `true` 时，弹窗自动调整大小以适应内容。                            |
 | `offsetLeft`      | `number`                                     | `0`                  | 弹窗相对于指定位置的水平偏移量，单位为像素。                                        | 可选项                                                             |
 | `offsetTop`       | `number`                                     | `0`                  | 弹窗相对于指定位置的垂直偏移量，单位为像素。                                        | 可选项                                                             |
@@ -32,13 +32,13 @@
 const popup = new CesiumPopup({
   dom: document.getElementById('popup'),
   viewer: cesiumViewer,
-  position: new Cesium.Cartesian3(12, 34, 56789),
   isAdaptive: true,
   offsetLeft: 10,
   offsetTop: 20,
   verticalOrigin: CesiumPopup.VerticalOrigin.BOTTOM,
   horizontalOrigin: CesiumPopup.HorizontalOrigin.RIGHT
 });
+popup.bindTo(new Cesium.Cartesian3(12, 34, 56789));
 ```
 
 
@@ -123,14 +123,13 @@ const popup = new CesiumPopup({
         const cesiumPopup = new CesiumPopup({
             viewer: viewer,
             dom: popupDom,
-            position: cartesian3,
             verticalOrigin: CesiumPopup.VerticalOrigin.TOP,
             horizontalOrigin: CesiumPopup.HorizontalOrigin.LEFT,
             isAdaptive: true,
         });
 
         // 监听cesium的postRender事件
-        cesiumPopup.listenPostRender();
+        cesiumPopup.bindTo(cartesian3);
 
 
         viewer.camera.setView({
