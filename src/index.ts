@@ -194,7 +194,7 @@ class CesiumPopup {
         top = position.top - elHeight; // 翻转到上方
       }
     }
-    
+
     // 设置弹窗位置
     this.setPosition({ left, top });
   }
@@ -211,18 +211,22 @@ class CesiumPopup {
       // 如果位置未定义，则不往下执行
       if (!_position) return;
 
-      // 判断实体是否在地球背面
-      // @ts-ignore
-      const isVisible: Boolean = new Cesium.EllipsoidalOccluder(
-        Cesium.Ellipsoid.WGS84,
-        this.viewer.camera.position,
-      ).isPointVisible(_position);
+      // 如果在3D模式下
+      if (this.viewer.scene.mode === Cesium.SceneMode.SCENE3D) {
+        // 判断实体是否在地球背面
+        // @ts-ignore
+        const isOnEarthBack: Boolean = new Cesium.EllipsoidalOccluder(
+          Cesium.Ellipsoid.WGS84,
+          this.viewer.camera.position,
+        ).isPointVisible(_position);
 
-      // 如果实体在地球背面，则隐藏弹窗，不往下执行
-      if (!isVisible) {
-        this.setVisible(false);
-        return;
+        // 如果实体在地球背面，则隐藏弹窗，不往下执行
+        if (!isOnEarthBack) {
+          this.setVisible(false);
+          return;
+        }
       }
+
 
       this.setVisible(true);
 
@@ -255,7 +259,7 @@ class CesiumPopup {
   }
 
 
-  
+
 
   /**
    * 移除监听 
