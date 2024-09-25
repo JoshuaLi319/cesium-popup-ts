@@ -226,7 +226,8 @@ class CesiumPopup {
           return;
         }
       }
-
+        
+      console.log(123)
 
       this.setVisible(true);
 

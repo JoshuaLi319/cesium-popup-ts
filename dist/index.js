@@ -1,145 +1,73 @@
-import * as l from "cesium";
-var f = /* @__PURE__ */ ((i) => (i[i.TOP = 0] = "TOP", i[i.CENTER = 1] = "CENTER", i[i.BOTTOM = 2] = "BOTTOM", i))(f || {}), a = /* @__PURE__ */ ((i) => (i[i.LEFT = 0] = "LEFT", i[i.CENTER = 1] = "CENTER", i[i.RIGHT = 2] = "RIGHT", i))(a || {});
-const h = class h {
-  /**
-   * 创建一个 CesiumPopup 实例
-   */
-  constructor(e) {
-    this.defaultOptions = {
-      isAdaptive: !1,
-      offsetLeft: 0,
-      offsetTop: 0,
-      verticalOrigin: 0,
-      horizontalOrigin: 0
-      /* LEFT */
-    };
-    const {
-      dom: t,
-      viewer: r,
-      isAdaptive: n,
-      offsetLeft: s,
-      offsetTop: o,
-      verticalOrigin: c,
-      horizontalOrigin: v
-    } = { ...this.defaultOptions, ...e };
-    if (!t || !r)
-      throw new Error("dom and viewer are required configuration options.");
-    this.dom = t, this.viewer = r, this.isAdaptive = n, this.offsetLeft = s, this.offsetTop = o, this.verticalOrigin = c, this.horizontalOrigin = v, this.setVisible(!0);
+import * as h from "cesium";
+var l = ((e) => (e[e.TOP = 0] = "TOP", e[e.CENTER = 1] = "CENTER", e[e.BOTTOM = 2] = "BOTTOM", e))(l || {}), c = ((e) => (e[e.LEFT = 0] = "LEFT", e[e.CENTER = 1] = "CENTER", e[e.RIGHT = 2] = "RIGHT", e))(c || {});
+const a = class a {
+  constructor(i) {
+    this.defaultOptions = { isAdaptive: !1, offsetLeft: 0, offsetTop: 0, verticalOrigin: 0, horizontalOrigin: 0 };
+    const { dom: t, viewer: s, isAdaptive: n, offsetLeft: o, offsetTop: r, verticalOrigin: f, horizontalOrigin: p } = { ...this.defaultOptions, ...i };
+    if (!t || !s) throw new Error("dom and viewer are required configuration options.");
+    this.dom = t, this.viewer = s, this.isAdaptive = n, this.offsetLeft = o, this.offsetTop = r, this.verticalOrigin = f, this.horizontalOrigin = p, this.setVisible(!0);
   }
-  // 使用 getBoundingClientRect 获取元素尺寸
   getCesiumContainerRect() {
-    const e = this.viewer.container.getBoundingClientRect();
-    return {
-      width: e.width,
-      height: e.height
-    };
+    const i = this.viewer.container.getBoundingClientRect();
+    return { width: i.width, height: i.height };
   }
-  /**
-   * 获取弹窗的宽度
-   * @returns {number} 弹窗的宽度
-   */
   getWidth() {
     return this.dom.clientWidth;
   }
-  /**
-   * 获取弹窗的高度
-   * @returns {number} 弹窗的高度
-   */
   getHeight() {
     return this.dom.clientHeight;
   }
-  /**
-   * 设置弹窗位置
-   * @param {Object} pos - 位置对象
-   * @param {number} pos.left - 弹窗的左边距
-   * @param {number} pos.top - 弹窗的上边距
-   */
-  setPosition(e) {
+  setPosition(i) {
     const t = this.dom.style;
-    t.left = `${e.left + this.offsetLeft}px`, t.top = `${e.top + this.offsetTop}px`;
+    t.left = `${i.left + this.offsetLeft}px`, t.top = `${i.top + this.offsetTop}px`;
   }
-  /**
-   * 设置弹窗的可见性
-   * @param {boolean} visible - 是否可见
-   */
-  setVisible(e) {
-    const t = this.dom.style;
-    t.display = e ? "block" : "none";
+  setVisible(i) {
+    this.dom.style.display = i ? "block" : "none";
   }
-  /**
-   * 检查弹窗是否显示
-   * @returns {boolean} 是否显示
-   */
   isVisible() {
     return this.dom.style.display === "block";
   }
-  /**
-   * 更新弹窗位置
-   * @param {Object} position - 实体的屏幕位置
-   * @param {number} position.left - 屏幕位置的左边距
-   * @param {number} position.top - 屏幕位置的上边距
-   */
-  updatePosition(e) {
-    const t = this.getWidth(), r = this.getHeight(), n = this.getCesiumContainerRect();
-    let s = e.left, o = e.top;
+  updatePosition(i) {
+    const t = this.getWidth(), s = this.getHeight(), n = this.getCesiumContainerRect();
+    let o = i.left, r = i.top;
     switch (this.horizontalOrigin) {
       case 2:
-        s -= t;
+        o -= t;
         break;
       case 1:
-        s -= t / 2;
-        break;
+        o -= t / 2;
     }
     switch (this.verticalOrigin) {
       case 2:
-        o -= r;
+        r -= s;
         break;
       case 1:
-        o -= r / 2;
-        break;
+        r -= s / 2;
     }
-    this.isAdaptive && this.horizontalOrigin != 1 && (s < 0 ? s = e.left : s + t > n.width && (s = e.left - t)), this.verticalOrigin != 1 && (o < 0 ? o = e.top : o + r > n.height && (o = e.top - r)), this.setPosition({ left: s, top: o });
+    this.isAdaptive && this.horizontalOrigin != 1 && (o < 0 ? o = i.left : o + t > n.width && (o = i.left - t)), this.verticalOrigin != 1 && (r < 0 ? r = i.top : r + s > n.height && (r = i.top - s)), this.setPosition({ left: o, top: r });
   }
-  /**
-   * 弹窗跟随实体移动
-   * @returns {Function} 返回移除监听的方法
-   */
-  bindTo(e) {
+  bindTo(i) {
     const t = () => {
-      let r = typeof e == "function" ? e() : e;
-      if (!r) return;
-      if (!new l.EllipsoidalOccluder(
-        l.Ellipsoid.WGS84,
-        this.viewer.camera.position
-      ).isPointVisible(r)) {
-        this.setVisible(!1);
-        return;
-      }
+      let s = typeof i == "function" ? i() : i;
+      if (!s) return;
+      if (this.viewer.scene.mode === h.SceneMode.SCENE3D && !new h.EllipsoidalOccluder(h.Ellipsoid.WGS84, this.viewer.camera.position).isPointVisible(s))
+        return void this.setVisible(!1);
       this.setVisible(!0);
-      const s = l.SceneTransforms.wgs84ToWindowCoordinates(
-        this.viewer.scene,
-        r
-      );
-      this.updatePosition({
-        left: s.x,
-        top: s.y
-      });
+      const n = h.SceneTransforms.wgs84ToWindowCoordinates(this.viewer.scene, s);
+      this.updatePosition({ left: n.x, top: n.y });
     };
     return this.removePostRenderListener = () => {
       this.viewer.scene.postRender.removeEventListener(t);
     }, t(), this.removePostRenderListener(), this.viewer.scene.postRender.addEventListener(t), this.removePostRenderListener;
   }
-  /**
-   * 移除监听 
-   */
   removePostRenderListener() {
   }
   destroy() {
     this.removePostRenderListener();
   }
 };
-h.VerticalOrigin = f, h.HorizontalOrigin = a;
-let d = h;
+a.VerticalOrigin = l, a.HorizontalOrigin = c;
+let d = a;
 export {
   d as default
 };

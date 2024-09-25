@@ -3,7 +3,7 @@
  * @version: 1.0.0
  * @Author: 李中华
  * @Date: 2024-08-14 10:46:14
- * @LastEditTime: 2024-09-20 16:29:05
+ * @LastEditTime: 2024-09-25 16:38:27
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +13,7 @@
     <!-- Include the CesiumJS JavaScript and CSS files -->
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script  src="../dist/index.umd.cjs"></script>
 
     <style>
         * {
@@ -57,10 +58,6 @@
         </div>
     </div>
     <script type="module">
-        import  CesiumPopup  from "../dist/index.js";
-        // 导入cesium-popup-ts依赖
-        // import CesiumPopup from "./node_modules/cesium-popup-ts/dist/index.js"
-        
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5ZGE0MzdlZC00NGFhLTQ3ODItODQyNC01MTVlMmZiMjA4NDciLCJpZCI6NzU4ODIsImlhdCI6MTYzODk1MDcyM30.aB08DKXLq43IEtIjXrkeDMm4GYmtr9GjfDWnHWumWF0';
 
         const viewer = new Cesium.Viewer('cesiumContainer', {
